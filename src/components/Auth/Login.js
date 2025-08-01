@@ -2,9 +2,10 @@ import React from 'react';
 import { Box, Button, TextField, Typography, Paper } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { loginUser } from '../../api/api';
+import { loginUser,getUserByEmail,fetchLocations } from '../../api/api';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { use } from 'react';
 
 const validationSchema = Yup.object({
   email: Yup.string().email('Invalid email').required('Required'),
@@ -21,7 +22,11 @@ export default function Login() {
     onSubmit: async (values, { setErrors }) => {
       try {
         const { data } = await loginUser(values);
-        login(data);
+        const  userdetails  = await getUserByEmail(data.user.email);
+        const locations  = await fetchLocations();
+        const city = locations.data.find(item => item._id === userdetails.data.locationId);
+        console.log("User details:", data);
+        login({ email: data.user.email, location: city.name });
         navigate('/dashboard');
       } catch (err) {
         setErrors({ general: err?.response?.data?.message || 'Login failed' });

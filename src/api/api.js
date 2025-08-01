@@ -8,6 +8,7 @@ const API = axios.create({ baseURL: 'http://localhost:3000' });
 export const fetchLocations = () => API.get('/locations');
 export const registerUser = (user) => API.post('/users', user);
 export const loginUser = (data) => API.post('/users/login', data);
+export const getUserByEmail = (email) => API.get(`/users?email=${encodeURIComponent(email)}`);
 
 export const fetchElections = (location) =>
   API.get(`/elections?location=${encodeURIComponent(location)}`);

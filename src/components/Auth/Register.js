@@ -39,8 +39,8 @@ export default function Register() {
     onSubmit: async (values, { setErrors }) => {
       try {
         const { data } = await registerUser(values);
-        console.log("User registered:", data);
-        login({...data, location: values.location});
+        console.log("User registered:", values);
+        login({ email: values.email, location: values.location });
         navigate('/dashboard');
       } catch (err) {
         setErrors({ general: err?.response?.data?.message || 'Registration failed' });

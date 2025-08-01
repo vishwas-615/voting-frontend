@@ -29,9 +29,12 @@ export default function Results() {
 
       // Get vote counts (for all elections/candidates system-wide)
       const { data: voteList = [] } = await fetchVoteCounts();
+
+
       setVoteCounts(voteList.map(v => ({
-        ...v, voteCount: Number(v.voteCount),
+        ...v, count: Number(v.count),
       })));
+
 
       setLoading(false);
     })();
@@ -56,7 +59,7 @@ export default function Results() {
         const sorted = [...cands].map(c => ({
           ...c,
           votes:
-            thisVotes.find(v => v.candidateId === c._id)?.voteCount || 0
+            thisVotes.find(v => v.candidateId === c._id)?.count || 0
         })).sort((a, b) => b.votes - a.votes);
 
         return (
